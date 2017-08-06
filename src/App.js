@@ -4,6 +4,7 @@ import * as BooksAPI from './BooksAPI'
 import './App.css'
 import BookShelf from './BookShelf'
 import { CurrentlyReading, WantToRead, Read } from './BookStatus'
+import Search from './Search'
 
 class BooksApp extends React.Component {
   constructor(props) {
@@ -30,10 +31,10 @@ class BooksApp extends React.Component {
   }
 
   onBookStatusChanged(event, book) {
-    //this.setState({value: event.target.value});
+
     const newStatus = event.target.value;
     BooksAPI.update(book, newStatus).then((newbooks) => {
-      console.log(newbooks);
+
       var items = this.state.books;
 
       items.forEach((element, index) => {
@@ -41,11 +42,6 @@ class BooksApp extends React.Component {
           items[index].shelf = newStatus;
         }
       });
-      // for(var i in items.length){
-      //   if(items[i].id === book.id){
-      //     items[i].shelf = newStatus;
-      //   }
-      // }
 
       this.setState({
         book: items,
@@ -97,23 +93,10 @@ class BooksApp extends React.Component {
 
 
             <Route path="/search" render={() => (
-              <div className="search-books">
-                <div className="search-books-bar">
-                  <Link className="close-search" to={'/'} />
-                  <div className="search-books-input-wrapper">
-                   
-                    <input type="text" placeholder="Search by title or author" />
-
-                  </div>
-                </div>
-                <div className="search-books-results">
-                  <ol className="books-grid"></ol>
-                </div>
-              </div>
+              <Search onStatusChanged={this.onBookStatusChanged} />
             )} />
           </Switch>
         </BrowserRouter>
-
         
       </div>
     )

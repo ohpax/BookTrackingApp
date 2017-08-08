@@ -17,8 +17,17 @@ class Search extends React.Component {
     searchTermChanged = (event) => {
         this.setState({ searchTerm: event.target.value });
         BooksAPI.search(this.state.searchTerm, 10).then((books) => {
-            if(books && !books.error)
+            if(books && !books.error){
+                books.map((book) => {
+                    var shelfBook = this.props.books.find(b => b.id === book.id);
+                    if(shelfBook){
+                        book.shelf = shelfBook.shelf;
+                    }
+                });
+
                 this.setState({ result: books });
+            }
+                
         })
     }
 

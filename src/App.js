@@ -10,9 +10,7 @@ class BooksApp extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentlyReading: [],
-      wantToRead: [],
-      read: [],
+      books: [],
       showSearchPage: true
     };
     this.onBookStatusChanged = this.onBookStatusChanged.bind(this);
@@ -22,10 +20,7 @@ class BooksApp extends React.Component {
   componentDidMount() {
     BooksAPI.getAll().then((books) => {
       this.setState({
-        books: books,
-        currentlyReading: books.filter((book) => book.shelf === CurrentlyReading),
-        read: books.filter((book) => book.shelf === Read),
-        wantToRead: books.filter((book) => book.shelf === WantToRead)
+        books: books
       })
     })
   }
@@ -44,10 +39,7 @@ class BooksApp extends React.Component {
       });
 
       this.setState({
-        book: items,
-        currentlyReading: items.filter((book) => newbooks.currentlyReading.includes(book.id)),
-        read: items.filter((book) => newbooks.read.includes(book.id)),
-        wantToRead: items.filter((book) => newbooks.wantToRead.includes(book.id)),
+         books: items,
       });
     })
   }
@@ -71,17 +63,17 @@ class BooksApp extends React.Component {
                     <BookShelf
                       title='Currently Reading'
                       onStatusChanged={this.onBookStatusChanged}
-                      books={this.state.currentlyReading}
+                      books={this.state.books.filter((book) => book.shelf === CurrentlyReading)}
                     />
                     <BookShelf
                       title='Want to Read'
                       onStatusChanged={this.onBookStatusChanged}
-                      books={this.state.wantToRead}
+                      books={this.state.books.filter((book) => book.shelf === WantToRead)}
                     />
                     <BookShelf
                       title='Read'
                       onStatusChanged={this.onBookStatusChanged}
-                      books={this.state.read}
+                      books={this.state.books.filter((book) => book.shelf === Read)}
                     />
                   </div>
                 </div>
@@ -93,7 +85,7 @@ class BooksApp extends React.Component {
 
 
             <Route path="/search" render={() => (
-              <Search onStatusChanged={this.onBookStatusChanged} />
+              <Search onStatusChanged={this.onBookStatusChanged} books={this.state.books} />
             )} />
           </Switch>
         </BrowserRouter>

@@ -6,9 +6,9 @@ const showBooks = (props) => {
         return <li></li>
 
     return (
-        props.books.map((book) => {
+        props.books.map((book,index) => {
             return (
-                <li key={book.id}>
+                <li key={index}>
                     <Book
                         width={128}
                         height={193}
@@ -22,10 +22,13 @@ const showBooks = (props) => {
 };
 
 const BookShelf = (props) => {
-
+    var title = '';
+    if(props.title){
+        title = <h2 className="bookshelf-title">{props.title}</h2>;
+    }
     return (
         <div className="bookshelf">
-            <h2 className="bookshelf-title">{props.title}</h2>
+            {title}
             <div className="bookshelf-books">
                 <ol className="books-grid">
                     {showBooks(props)}
